@@ -43,10 +43,17 @@
         </div>
 
         <p class="admin-hint">
-          Изменения сохраняются в памяти браузера (localStorage). Откройте
-          <a href="index.html" target="_blank" rel="noopener">главную страницу</a>
-          в <strong>том же браузере</strong> (Chrome, Edge…) и нажмите <strong>Ctrl+F5</strong>.
-          Не открывайте сайт через другой браузер или «Просмотр» в редакторе — там другая память.
+          <strong>На вашем компьютере:</strong> «Сохранить на сайте» пишет в localStorage. Откройте
+          <a href="index.html" target="_blank" rel="noopener">главную</a>
+          в <strong>том же браузере</strong> и обновите <strong>Ctrl+F5</strong>.
+        </p>
+        <p class="admin-hint">
+          <strong>Опубликованный сайт (GitHub Pages):</strong> посетители не видят localStorage.
+          После правок нажмите «Скачать JSON» → положите файл в репозиторий как
+          <code>assets/site-content.json</code> (или правьте <code>index.html</code> / <code>assets/catalog.js</code>).
+          Новые фото — в <code>assets/products/</code>, затем <code>git add</code>, <code>git commit</code>,
+          <code>git push</code>. Через 1–2 минуты изменения появятся на
+          <code>partnersimferopol-bit.github.io/3d-forest/</code>.
         </p>
 
         <div class="admin-tabs" role="tablist">

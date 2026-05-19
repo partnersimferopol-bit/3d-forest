@@ -38,7 +38,7 @@
         lead1: "Именные изделия из фанеры и 3D-печати.",
         lead2: "От которых плачут от счастья и которые хранят годами.",
         badge: "Лазерная резка · Фанера · 3D-печать",
-        emblem: "эмблема.png",
+        emblem: "assets/products/эмблема.png",
       },
       sections: {
         whyTitle: "Почему наши подарки не как у всех",
@@ -171,6 +171,23 @@
     }
   }
 
+  function resolveAssetPath(path) {
+    let p = String(path || "")
+      .trim()
+      .replace(/\\/g, "/");
+    if (!p || /^(data:|https?:)/i.test(p)) return p;
+
+    const assetsIdx = p.toLowerCase().indexOf("assets/products/");
+    if (assetsIdx >= 0) return p.slice(assetsIdx);
+
+    const fileName = p.split("/").pop() || "";
+    if (/\.(png|jpe?g|webp|gif|svg)$/i.test(fileName)) {
+      return `assets/products/${fileName}`;
+    }
+
+    return p.startsWith("assets/") ? p : `assets/products/${p.replace(/^\.?\//, "")}`;
+  }
+
   function getProductImage(product) {
     if (product.thumbDataUrl) return product.thumbDataUrl;
     return product.thumb || "";
@@ -285,6 +302,7 @@ window.CATALOG_PRODUCTS = ${JSON.stringify(products, null, 2)};
     saveContent,
     exportJson,
     exportCatalogJs,
+    resolveAssetPath,
     getProductImage,
     getReviewProductImage,
     getSettings,

@@ -20,6 +20,29 @@
     if (el && html != null) el.innerHTML = html;
   }
 
+  function resolveAssetPath(path) {
+    if (window.SiteStore?.resolveAssetPath) {
+      return window.SiteStore.resolveAssetPath(path);
+    }
+    let p = String(path || "")
+      .trim()
+      .replace(/\\/g, "/");
+    if (!p || /^(data:|https?:)/i.test(p)) return p;
+    if (p.includes("assets/products/")) return p;
+    const fileName = p.split("/").pop() || "";
+    if (/\.(png|jpe?g|webp|gif)$/i.test(fileName)) {
+      return `assets/products/${fileName}`;
+    }
+    return p.startsWith("assets/") ? p : `assets/products/${p.replace(/^\.?\//, "")}`;
+  }
+
+  function heroEmblemSrc(hero) {
+    if (!hero) return "";
+    if (hero.emblemDataUrl) return hero.emblemDataUrl;
+    if (hero.emblem) return resolveAssetPath(hero.emblem);
+    return "";
+  }
+
   function renderReviews(reviews) {
     const wrapper = document.querySelector(".reviews-swiper .swiper-wrapper");
     if (!wrapper || !Array.isArray(reviews)) return;
@@ -72,11 +95,10 @@
     );
     setText("[data-cms='hero-badge']", h.badge);
 
-    const emblem = document.querySelector(".emblem-showcase__img");
-    if (emblem) {
-      if (h.emblemDataUrl) emblem.src = h.emblemDataUrl;
-      else if (h.emblem) emblem.src = h.emblem;
-    }
+    const emblemSrc = heroEmblemSrc(h);
+    document.querySelectorAll(".emblem-showcase__img, .brand__mark").forEach((img) => {
+      if (emblemSrc) img.src = emblemSrc;
+    });
 
     const s = content.sections || {};
     setText("[data-cms='why-title']", s.whyTitle);

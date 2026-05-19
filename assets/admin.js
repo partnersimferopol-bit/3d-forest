@@ -16,6 +16,9 @@
 
   function persistToSite(options = {}) {
     if (!options.skipCollect) collectAllPanels();
+    if (content.hero?.emblem) {
+      content.hero.emblem = normalizeImagePath(content.hero.emblem);
+    }
     const result = window.SiteStore.saveContent(content);
     if (result.content) content = result.content;
     if (!result.ok) {
@@ -308,7 +311,8 @@
       ${field("Подзаголовок, строка 1", "hero.lead1", h.lead1)}
       ${field("Подзаголовок, строка 2", "hero.lead2", h.lead2)}
       ${field("Бейдж под эмблемой", "hero.badge", h.badge)}
-      ${field("Путь к эмблеме", "hero.emblem", h.emblem)}
+      ${field("Путь к эмблеме", "hero.emblem", h.emblem, "text")}
+      <p class="admin-hint">Например: <code>assets/products/эмблема.png</code> или просто <code>эмблема.png</code></p>
       <h2>Заголовки секций</h2>
       ${field("Почему мы", "sections.whyTitle", s.whyTitle)}
       ${field("Как работает", "sections.howTitle", s.howTitle)}
