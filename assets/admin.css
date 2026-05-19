@@ -1,0 +1,201 @@
+.admin-body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px 18px 48px;
+  background: var(--wood-mid);
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+.admin-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.admin-card {
+  background: rgba(255, 253, 248, 0.95);
+  border: 1px solid rgba(61, 42, 26, 0.14);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(45, 30, 18, 0.12);
+}
+
+.admin-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-head h1 {
+  font-family: var(--font-display);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.admin-tab {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(61, 42, 26, 0.15);
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  font: inherit;
+}
+
+.admin-tab--active {
+  background: linear-gradient(180deg, var(--accent-laser), #9e4718);
+  color: #fff;
+  border-color: transparent;
+}
+
+.admin-panel {
+  display: none;
+}
+
+.admin-panel--active {
+  display: block;
+}
+
+.admin-field {
+  margin-bottom: 14px;
+}
+
+.admin-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 0.92rem;
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(61, 42, 26, 0.2);
+  font: inherit;
+  background: #fff;
+}
+
+.admin-field textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(61, 42, 26, 0.12);
+}
+
+.admin-item {
+  border: 1px solid rgba(61, 42, 26, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.admin-item__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.admin-item__head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.admin-thumb {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(61, 42, 26, 0.15);
+}
+
+.admin-thumb--wide {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  max-height: 160px;
+  margin-bottom: 12px;
+}
+
+.admin-field--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-file-btn {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+}
+
+.admin-file-btn input {
+  display: none;
+}
+
+.admin-file-name {
+  font-size: 0.88rem;
+  opacity: 0.75;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  background: var(--bark);
+  color: #fff;
+  border-radius: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  z-index: 300;
+}
+
+.admin-toast--show {
+  opacity: 1;
+}
+
+.admin-hint {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+.admin-login {
+  max-width: 400px;
+  margin: 10vh auto 0;
+}
+
+.hidden {
+  display: none !important;
+}

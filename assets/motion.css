@@ -1,0 +1,243 @@
+/* AOS + Swiper + деревянные пластины */
+
+/* ==================== Глобальный курсор — золотистый лист ==================== */
+* {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='36' viewBox='0 0 24 24' fill='%23d97706' stroke='%23b45309' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C8 2 4 6 4 12c0 4 3.5 7.5 7 10 3.5-2.5 7-6 7-10 0-6-4-10-8-10z'/%3E%3Cpath d='M12 6C10 6 8 8 8 11' fill='none'/%3E%3C/svg%3E")
+      14 12,
+    auto;
+}
+
+a:hover,
+button:hover,
+.btn:hover,
+.phrase-btn:hover,
+.review-card:hover,
+.benefit:hover,
+.step:hover,
+select:hover,
+textarea:hover,
+input:hover,
+.nav__link:hover,
+.popular-card:hover,
+.product:hover,
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='40' viewBox='0 0 24 24' fill='%23f59e0b' stroke='%23b45309' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C8 2 4 6 4 12c0 4 3.5 7.5 7 10 3.5-2.5 7-6 7-10 0-6-4-10-8-10z'/%3E%3Cpath d='M12 6C10 6 8 8 8 11' fill='none'/%3E%3C/svg%3E")
+      16 14,
+    pointer;
+}
+
+.hero-reactions,
+.benefits-grid {
+  overflow: hidden;
+}
+
+/* ==================== Мягкие деревянные пластины ==================== */
+.benefit,
+.reviews-swiper .review-card,
+.step {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(139, 69, 19, 0.15);
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12),
+    inset 0 6px 14px rgba(255, 255, 255, 0.65),
+    inset 0 -6px 10px rgba(139, 69, 19, 0.12);
+}
+
+.benefit > *,
+.reviews-swiper .review-card > *,
+.step > * {
+  position: relative;
+  z-index: 2;
+}
+
+.benefit:hover,
+.reviews-swiper .review-card:hover,
+.step:hover {
+  transform: translateY(-16px) rotate(1deg) scale(1.04);
+  box-shadow:
+    0 30px 60px -15px rgba(139, 69, 19, 0.35),
+    inset 0 6px 14px rgba(255, 255, 255, 0.8);
+  border-color: rgba(245, 190, 100, 0.45);
+}
+
+.reviews-swiper .review-card {
+  border-radius: 32px;
+}
+
+.reviews-swiper .review-card:hover {
+  transform: translateY(-20px) rotate(-1.5deg) scale(1.05);
+  box-shadow: 0 35px 70px -20px rgba(139, 69, 19, 0.38);
+}
+
+.benefit:hover::before,
+.reviews-swiper .review-card:hover::before,
+.step:hover::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(245, 190, 100, 0.55) 0%,
+    rgba(234, 160, 80, 0.35) 45%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.benefit:hover::before,
+.reviews-swiper .review-card:hover::before,
+.step:hover::before {
+  opacity: 1;
+}
+
+.benefit {
+  padding: 32px 28px;
+}
+
+.benefit strong {
+  font-size: 1.35rem;
+  display: block;
+  margin-bottom: 12px;
+  color: var(--bark, #3d2a1a);
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(196, 92, 38, 0.28);
+}
+
+.emblem-showcase__img {
+  animation: gentleFloat 7s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.phrase-btn:hover {
+  background: rgba(184, 115, 51, 0.12);
+  border-color: var(--copper, #b87333);
+}
+
+.section-subtitle {
+  margin: -0.25rem 0 1.5rem;
+  opacity: 0.88;
+  font-size: 1.05rem;
+}
+
+.reviews-swiper {
+  padding: 30px 0 70px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.reviews-swiper .review-card {
+  height: 520px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-header {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.review-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.review-date {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.stars {
+  color: var(--copper, #b87333);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.review-product {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.review-text {
+  flex-grow: 1;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink, #2a1f14);
+  margin: 0;
+}
+
+.review-author {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.92rem;
+  color: var(--copper-dark, #7a4f22);
+}
+
+.reviews-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.reviews-cta p {
+  margin-bottom: 1rem;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--copper-dark, #7a4f22);
+  top: 45%;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--accent-laser, #c45c26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emblem-showcase__img {
+    animation: none;
+  }
+
+  .btn:hover,
+  .benefit:hover,
+  .reviews-swiper .review-card:hover,
+  .step:hover {
+    transform: none;
+  }
+
+  .benefit:hover::before,
+  .reviews-swiper .review-card:hover::before,
+  .step:hover::before {
+    opacity: 0;
+  }
+}

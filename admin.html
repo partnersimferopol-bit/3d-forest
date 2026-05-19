@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Кабинет администратора — 3Д-лес</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/motion.css" />
+    <link rel="stylesheet" href="assets/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div id="loginScreen" class="admin-wrap admin-login">
+      <div class="admin-card">
+        <h1>Вход в кабинет</h1>
+        <p class="admin-hint">
+          Пароль по умолчанию: <strong>3dles2026</strong> (смените во вкладке «Настройки»).
+        </p>
+        <form id="loginForm">
+          <div class="admin-field">
+            <label for="loginPassword">Пароль</label>
+            <input id="loginPassword" type="password" required autocomplete="current-password" />
+          </div>
+          <button class="btn btn--primary" type="submit">Войти</button>
+        </form>
+        <p class="admin-hint" style="margin-top: 16px">
+          <a href="index.html">← На главную страницу</a>
+        </p>
+      </div>
+    </div>
+
+    <div id="adminApp" class="admin-wrap hidden">
+      <div class="admin-card">
+        <div class="admin-head">
+          <h1>Кабинет 3Д-лес</h1>
+          <div>
+            <a class="btn btn--ghost btn--small" href="index.html" target="_blank">Открыть сайт</a>
+            <button type="button" class="btn btn--ghost btn--small" id="logoutBtn">Выйти</button>
+          </div>
+        </div>
+
+        <p class="admin-hint">
+          Изменения сохраняются в памяти браузера (localStorage). Откройте
+          <a href="index.html" target="_blank" rel="noopener">главную страницу</a>
+          в <strong>том же браузере</strong> (Chrome, Edge…) и нажмите <strong>Ctrl+F5</strong>.
+          Не открывайте сайт через другой браузер или «Просмотр» в редакторе — там другая память.
+        </p>
+
+        <div class="admin-tabs" role="tablist">
+          <button type="button" class="admin-tab admin-tab--active" data-tab="texts">Тексты</button>
+          <button type="button" class="admin-tab" data-tab="products">Товары</button>
+          <button type="button" class="admin-tab" data-tab="reviews">Отзывы</button>
+          <button type="button" class="admin-tab" data-tab="contacts">Контакты</button>
+          <button type="button" class="admin-tab" data-tab="settings">Настройки</button>
+        </div>
+
+        <div id="panel-texts" class="admin-panel admin-panel--active"></div>
+        <div id="panel-products" class="admin-panel"></div>
+        <div id="panel-reviews" class="admin-panel"></div>
+        <div id="panel-contacts" class="admin-panel"></div>
+        <div id="panel-settings" class="admin-panel"></div>
+
+        <div class="admin-actions">
+          <button type="button" class="btn btn--primary" id="saveBtn">Сохранить на сайте</button>
+          <a class="btn btn--ghost" href="index.html" target="_blank" rel="noopener">Открыть главную ↗</a>
+          <button type="button" class="btn btn--ghost" id="exportJsonBtn">Скачать JSON</button>
+          <button type="button" class="btn btn--ghost" id="exportCatalogBtn">Скачать catalog.js</button>
+          <label class="btn btn--ghost" style="cursor: pointer">
+            Загрузить JSON
+            <input type="file" id="importJson" accept="application/json" hidden />
+          </label>
+          <button type="button" class="btn btn--ghost" id="resetBtn">Сбросить к исходному</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="admin-toast" role="status"></div>
+
+    <script src="assets/catalog.js"></script>
+    <script src="assets/site-store.js"></script>
+    <script src="assets/admin.js"></script>
+  </body>
+</html>
