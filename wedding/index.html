@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Подарок из Будущего — создай персональный деревянный подарок от 3Д-лес за 3 минуты">
+  <title>Подарок из Будущего | 3Д-лес</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+    <div class="hero-backdrop" aria-hidden="true">
+      <img
+        class="hero-cover-img"
+        src="assets/images/hero-cover.jpg"
+        alt="Подарок из Будущего — создай подарок, который запомнится навсегда"
+        width="832"
+        height="1248"
+        fetchpriority="high"
+        decoding="sync"
+      />
+    </div>
+    <div class="ambient-bg" aria-hidden="true"></div>
+    <div class="particles" aria-hidden="true"></div>
+
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-head">
+        <span class="progress-step-icon" id="progress-step-icon" aria-hidden="true"></span>
+        <p class="progress-label" id="progress-label">Шаг 1 из 6</p>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <img
+        class="progress-art"
+        id="progress-art"
+        src="assets/icons/progress-bar.webp"
+        alt="Прогресс: шаги 1–6 игры"
+        width="320"
+        height="80"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Этап 0 — обложка -->
+    <section class="screen intro active" id="screen-intro">
+      <div class="intro-content">
+        <div class="intro-cta">
+          <button type="button" class="btn btn-primary btn-start-glow" id="btn-start">
+            Создать подарок из будущего
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Вопрос 1 -->
+    <section class="screen" id="screen-q1" data-step="1">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 1</p>
+        <h2>Кому ты хочешь подарить особенное тепло?</h2>
+      </div>
+      <div class="cards" id="cards-recipient"></div>
+      <div class="input-wrap input-other" id="recipient-other-wrap" style="display:none">
+        <input type="text" id="recipient-other" placeholder="Кому именно?">
+      </div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-1">Назад</button>
+        <button type="button" class="btn btn-nav-next" id="btn-next-1" data-next disabled>Далее</button>
+      </div>
+    </section>
+
+    <!-- Вопрос 2 -->
+    <section class="screen" id="screen-q2" data-step="2">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 2</p>
+        <h2>Какой он/она человек?</h2>
+        <p class="question-note">Выбери от 1 до 3</p>
+      </div>
+      <div class="cards single-col" id="cards-traits"></div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-2">Назад</button>
+        <button type="button" class="btn btn-nav-next" id="btn-next-2" data-next disabled>Далее</button>
+      </div>
+    </section>
+
+    <!-- Вопрос 3 -->
+    <section class="screen" id="screen-q3" data-step="3">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 3</p>
+        <h2>По какому поводу будет подарок?</h2>
+      </div>
+      <div class="cards single-col" id="cards-occasion"></div>
+      <div class="input-wrap input-other" id="occasion-other-wrap" style="display:none">
+        <input type="text" id="occasion-other" placeholder="Какая дата или повод?">
+      </div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-3">Назад</button>
+        <button type="button" class="btn btn-nav-next" id="btn-next-3" data-next disabled>Далее</button>
+      </div>
+    </section>
+
+    <!-- Вопрос 4 -->
+    <section class="screen" id="screen-q4" data-step="4">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 4</p>
+        <h2>Какие слова ты хочешь сказать через этот подарок?</h2>
+        <p class="question-note" id="q4-note"></p>
+      </div>
+      <div class="input-wrap">
+        <textarea id="words-input" placeholder="Напиши от души…"></textarea>
+      </div>
+      <div class="hints">
+        <button type="button" class="hint-chip">Спасибо, что ты есть</button>
+        <button type="button" class="hint-chip">Каждый день с тобой — чудо</button>
+        <button type="button" class="hint-chip">Ты — моё самое большое счастье</button>
+      </div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-4">Назад</button>
+        <button type="button" class="btn btn-nav-next" id="btn-next-4" data-next>Далее</button>
+      </div>
+    </section>
+
+    <!-- Вопрос 5 -->
+    <section class="screen" id="screen-q5" data-step="5">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 5 <span class="optional-badge">(опционально)</span></p>
+        <h2>Добавь важные детали</h2>
+        <p class="question-note" id="q5-note"></p>
+      </div>
+      <div class="details-grid">
+        <div>
+          <label for="detail-name">Имя человека</label>
+          <input type="text" id="detail-name" placeholder="Как зовут?">
+        </div>
+        <div>
+          <label for="detail-date">Важная дата</label>
+          <input type="text" id="detail-date" placeholder="Например: 14.02.2020">
+        </div>
+        <div>
+          <label for="detail-phrase">Любимая фраза / цитата</label>
+          <input type="text" id="detail-phrase" placeholder="Ваша особая фраза">
+        </div>
+      </div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-5">Назад</button>
+        <button type="button" class="btn btn-nav-next" id="btn-next-5" data-next>Далее</button>
+      </div>
+    </section>
+
+    <!-- Вопрос 6 -->
+    <section class="screen" id="screen-q6" data-step="6">
+      <div class="question-header">
+        <span class="step-icon" aria-hidden="true"></span>
+        <p class="step">Вопрос 6</p>
+        <h2>В каком стиле сделать подарок?</h2>
+      </div>
+      <div class="cards single-col" id="cards-style"></div>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" id="btn-back-6">Назад</button>
+        <button type="button" class="btn btn-nav-next btn-nav-next--long" id="btn-next-6" data-next disabled>Узнать свой подарок</button>
+      </div>
+    </section>
+
+    <!-- Загрузка -->
+    <section class="screen loading-screen" id="screen-loading">
+      <div class="loader-ring"></div>
+      <p>Мастер из будущего создаёт твой подарок…</p>
+    </section>
+
+    <!-- Результат -->
+    <section class="screen result" id="screen-result">
+      <div class="gift-visual wood-panel">
+        <picture class="gift-picture" id="gift-picture">
+          <source id="gift-img-webp" type="image/webp" />
+          <img
+            id="gift-img"
+            class="gift-img"
+            loading="lazy"
+            decoding="async"
+            sizes="(max-width: 480px) 100vw, 480px"
+            alt=""
+          />
+          <div class="gift-engrave-preview" id="gift-engrave-preview" aria-hidden="true"></div>
+        </picture>
+        <h2 class="gift-title" id="gift-title">Подарок</h2>
+      </div>
+      <p class="gift-sample-note" id="gift-sample-note"></p>
+      <div class="gift-personal wood-panel" id="gift-personal" hidden>
+        <h3 class="gift-personal-title" id="gift-personal-title"></h3>
+        <dl class="gift-personal-list" id="gift-personal-list"></dl>
+      </div>
+      <p class="gift-text" id="gift-text"></p>
+      <div class="products-block">
+        <h3>Идеи от 3Д-лес</h3>
+        <p class="products-hint" id="products-hint">Выберите, что хотите заказать — нажмите на вариант</p>
+        <ul class="products-list" id="products-list"></ul>
+      </div>
+      <form class="lead-form wood-panel" id="lead-form">
+        <h3>Отправить мастеру в 3Д-лес</h3>
+        <div class="field">
+          <label for="lead-name">Ваше имя</label>
+          <input type="text" id="lead-name" required placeholder="Как к вам обращаться?">
+        </div>
+        <div class="field">
+          <label for="lead-contact">Telegram или MAX</label>
+          <input type="text" id="lead-contact" required placeholder="@username, ссылка MAX или +7…">
+        </div>
+        <div class="field">
+          <label for="lead-comment">Комментарий (необязательно)</label>
+          <textarea id="lead-comment" rows="2" placeholder="Пожелания к заказу"></textarea>
+        </div>
+        <label class="lead-consent" id="lead-consent-label">
+          <input type="checkbox" id="lead-consent" required>
+          <span id="lead-consent-text">Я принимаю условия <a href="oferta.html" target="_blank" rel="noopener noreferrer">публичной оферты</a> и соглашаюсь с <a href="privacy.html" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a></span>
+        </label>
+        <button type="submit" class="btn btn-gold" id="lead-submit" disabled>Отправить мастеру в 3Д-лес</button>
+      </form>
+      <p class="success-msg" id="lead-success">Спасибо! Мастер свяжется с вами. Заявка сохранена.</p>
+      <div class="result-actions">
+        <button type="button" class="btn btn-secondary btn-with-icon" id="btn-share">
+          <span class="btn-icon-slot" id="btn-share-icon" aria-hidden="true"></span>
+          <span>Поделиться в сторис</span>
+        </button>
+        <button type="button" class="btn btn-vk" id="btn-vk" aria-label="Поделиться ВКонтакте">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.785 16.241s.336-.027.483-.206c.116-.135.09-.39.09-.39s-.014-1.317.588-1.514c.594-.195 1.322 1.277 2.095 1.813.59.405 1.11.31 1.11.31l1.967-.028s.97-.061.512-.825c-.038-.062-.268-.567-1.372-1.672-1.143-1.086-1.04-.455.48-1.46.835-.552 1.263-.933 1.142-1.104-.108-.146-.77-.102-1.716-.063-1.449.06-2.13.04-2.46-.234-.51-.335-.36-1.075-.36-1.075s.022-.67.18-.966c.176-.31.607-.405.607-.405h1.67s.248-.033.43.117c.132.108.215.354.215.354s.038.97-.087 1.492c-.12.51-.378.67-.378.67s-.288.184-.678.014c-.52-.223-1.092-.463-1.15-.486-.437-.185-.308-.36-.234-.555.175-.416.8-1.013 1.103-1.368.303-.355.665-.744.665-1.003 0-.259-.042-.37-.348-.37h-1.93s-1.42.01-1.637.307c-.12.157-.094.498-.094.498s.168 2.502-.392 2.81-.9-.214-2.02-2.14-.99-1.4-1.1-1.47-.29-.17-.29.17c0 .255.01 1.63.01 1.63s-.01.76-.335.87-.77-.11-1.72-1.06c-1.17-1.16-2.05-3.24-2.05-3.24s-.11-.29.084-.44c.18-.135.42-.09.42-.09l2.54-.02s.373-.028.624.11c.15.082.25.27.25.27s.047 1.23-.094 1.79-.28.52-.28.52-.503.028-1.07-.51c-1.03-1.07-1.44-2.23-1.44-2.23s-.12-.39.094-.6c.19-.19.54-.24.54-.24h1.96z"/></svg>
+          Поделиться ВКонтакте
+        </button>
+        <button type="button" class="btn btn-ghost btn-with-icon" id="btn-restart">
+          <span class="btn-icon-slot" id="btn-restart-icon" aria-hidden="true"></span>
+          <span>Создать ещё один подарок</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="site-legal" id="site-legal">
+      <a href="oferta.html" target="_blank" rel="noopener noreferrer" id="link-offer">Публичная оферта</a>
+      <span class="site-legal-sep" aria-hidden="true">·</span>
+      <a href="privacy.html" target="_blank" rel="noopener noreferrer" id="link-privacy">Политика конфиденциальности</a>
+    </footer>
+  </div>
+
+  <canvas id="share-canvas" width="1080" height="1920"></canvas>
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/config-overrides.js"></script>
+  <script src="js/config-leads.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

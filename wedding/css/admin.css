@@ -1,0 +1,265 @@
+:root {
+  --bg: #1a1410;
+  --panel: #2a211a;
+  --border: rgba(201, 169, 98, 0.35);
+  --gold: #c9a962;
+  --text: #faf6f1;
+  --muted: #c4b5a5;
+  --input-bg: #faf6f1;
+  --input-text: #2a1f18;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.admin-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.admin-header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--gold);
+}
+
+.admin-header a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.admin-header a:hover {
+  text-decoration: underline;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100dvh - 140px);
+}
+
+.admin-nav {
+  padding: 16px 12px;
+  border-right: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.admin-nav button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 6px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-nav button.active,
+.admin-nav button:hover {
+  background: rgba(201, 169, 98, 0.18);
+  color: var(--gold);
+}
+
+.admin-main {
+  padding: 24px;
+  max-width: 900px;
+}
+
+.admin-panel {
+  display: none;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
+.admin-panel h2 {
+  font-size: 1.1rem;
+  margin: 0 0 16px;
+  color: var(--gold);
+}
+
+.admin-help {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  font: inherit;
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.field textarea.code {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.85rem;
+  min-height: 280px;
+}
+
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .admin-nav button {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
+
+  .row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  vertical-align: top;
+}
+
+.admin-table th {
+  background: rgba(201, 169, 98, 0.12);
+  text-align: left;
+}
+
+.admin-table input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.admin-actions button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), #b8944f);
+  color: #fff;
+}
+
+.btn-dark {
+  background: #5c4636;
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--border);
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  background: #3d2e24;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  display: none;
+  z-index: 10;
+}
+
+.toast.show {
+  display: block;
+}
+
+.leads-list {
+  list-style: none;
+  padding: 0;
+}
+
+.leads-list li {
+  padding: 12px;
+  margin-bottom: 8px;
+  background: var(--panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.leads-list time {
+  color: var(--muted);
+  font-size: 0.75rem;
+}

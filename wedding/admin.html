@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Админ-панель | Подарок из Будущего</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <h1>Админ-панель — Подарок из Будущего</h1>
+    <a href="index.html">← Открыть игру</a>
+  </header>
+
+  <div class="admin-layout">
+    <nav class="admin-nav" id="admin-nav">
+      <button type="button" data-tab="gifts" class="active">Подарки</button>
+      <button type="button" data-tab="rules">Правила подбора</button>
+      <button type="button" data-tab="questions">Вопросы и ответы</button>
+      <button type="button" data-tab="ui">Тексты интерфейса</button>
+      <button type="button" data-tab="leads">Заявки</button>
+      <button type="button" data-tab="help">Как пользоваться</button>
+    </nav>
+
+    <main class="admin-main">
+      <section class="admin-panel active" id="panel-gifts">
+        <h2>Подарки (результаты)</h2>
+        <p class="admin-help">Выберите номер подарка и измените заголовок, описание и идеи от 3Д-лес (каждая идея — с новой строки).</p>
+        <div class="field">
+          <label for="gift-select">Номер подарка</label>
+          <select id="gift-select"></select>
+        </div>
+        <div class="field">
+          <label for="gift-title">Заголовок</label>
+          <input type="text" id="gift-title">
+        </div>
+        <div class="field">
+          <label for="gift-text">Текст результата</label>
+          <textarea id="gift-text" rows="6"></textarea>
+        </div>
+        <div class="field">
+          <label for="gift-products">Идеи от 3Д-лес (по одной на строку)</label>
+          <textarea id="gift-products" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-rules">
+        <h2>Правила подбора подарка</h2>
+        <p class="admin-help">JSON-массив. Первое совпадение сверху выбирает подарок. Поля: giftId, recipient, occasion, traits.</p>
+        <div class="field">
+          <textarea id="rules-json" class="code" spellcheck="false"></textarea>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-questions">
+        <h2>Варианты ответов в игре</h2>
+        <p class="admin-help">id — технический ключ (не меняйте без необходимости). label — текст на кнопке.</p>
+        <h3 style="color:var(--gold);font-size:1rem;margin:20px 0 8px">Кому дарите</h3>
+        <div id="table-recipients"></div>
+        <button type="button" class="btn-outline" data-add="recipients">+ Строка</button>
+
+        <h3 style="color:var(--gold);font-size:1rem;margin:20px 0 8px">Характер (до 3)</h3>
+        <div id="table-traits"></div>
+        <button type="button" class="btn-outline" data-add="traits">+ Строка</button>
+
+        <h3 style="color:var(--gold);font-size:1rem;margin:20px 0 8px">Повод</h3>
+        <div id="table-occasions"></div>
+        <button type="button" class="btn-outline" data-add="occasions">+ Строка</button>
+
+        <h3 style="color:var(--gold);font-size:1rem;margin:20px 0 8px">Стиль</h3>
+        <div id="table-styles"></div>
+        <button type="button" class="btn-outline" data-add="styles">+ Строка</button>
+      </section>
+
+      <section class="admin-panel" id="panel-ui">
+        <h2>Тексты интерфейса</h2>
+        <div class="field">
+          <label for="ui-intro">Кнопка на обложке</label>
+          <input type="text" id="ui-intro">
+        </div>
+        <div class="field">
+          <label for="ui-loading">Текст загрузки</label>
+          <input type="text" id="ui-loading">
+        </div>
+        <div class="field">
+          <label for="ui-products">Заголовок «Идеи от 3Д-лес»</label>
+          <input type="text" id="ui-products">
+        </div>
+        <div class="field">
+          <label for="ui-lead">Заголовок формы заявки</label>
+          <input type="text" id="ui-lead">
+        </div>
+        <div class="field">
+          <label for="ui-success">Сообщение после отправки</label>
+          <input type="text" id="ui-success">
+        </div>
+        <div class="field">
+          <label for="ui-hints">Подсказки к вопросу 4 (по одной на строку)</label>
+          <textarea id="ui-hints" rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-leads">
+        <h2>Заявки с сайта</h2>
+        <p class="admin-help">При настроенном API — все заявки с сайта + уведомления в ВК. Иначе только этот браузер (localStorage).</p>
+        <div class="field">
+          <label for="leads-api-url">URL API (Cloudflare Worker)</label>
+          <input type="url" id="leads-api-url" placeholder="https://gift-future-leads.xxx.workers.dev">
+        </div>
+        <div class="field">
+          <label for="leads-api-secret">Ключ админки (ADMIN_SECRET)</label>
+          <input type="password" id="leads-api-secret" placeholder="Пароль из wrangler secret">
+        </div>
+        <button type="button" class="btn-outline" id="btn-save-api-settings">Сохранить настройки API</button>
+        <button type="button" class="btn-outline" id="btn-refresh-leads">Обновить список</button>
+        <button type="button" class="btn-outline" id="btn-export-leads">Скачать заявки (JSON)</button>
+        <ul class="leads-list" id="leads-list"></ul>
+      </section>
+
+      <section class="admin-panel" id="panel-help">
+        <h2>Как вносить изменения</h2>
+        <ol class="admin-help" style="padding-left:1.2rem">
+          <li>Откройте эту страницу: <strong>admin.html</strong> (рядом с игрой).</li>
+          <li>Измените тексты в разделах и нажмите <strong>«Применить на этом компьютере»</strong> — игра на этом ПК сразу подхватит правки.</li>
+          <li>Для постоянной публикации на сайте нажмите <strong>«Скачать data.js»</strong> и замените файл <code>js/data.js</code> в папке проекта.</li>
+          <li>Резервная копия: <strong>«Скачать JSON»</strong>. Восстановление: <strong>«Загрузить JSON»</strong>.</li>
+          <li>Картинки результатов: <code>assets/images/results/result-N.jpg</code> (N от 1 до 20).</li>
+          <li>Заявки и ВК: инструкция <strong>DEPLOY-VK.md</strong> (Worker + сообщения сообщества).</li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <footer class="admin-actions">
+    <button type="button" class="btn-gold" id="btn-apply">Применить на этом компьютере</button>
+    <button type="button" class="btn-dark" id="btn-download-js">Скачать data.js</button>
+    <button type="button" class="btn-outline" id="btn-download-json">Скачать JSON</button>
+    <button type="button" class="btn-outline" id="btn-import">Загрузить JSON</button>
+    <button type="button" class="btn-outline" id="btn-reset">Сбросить правки</button>
+  </footer>
+
+  <input type="file" id="import-file" accept=".json,application/json" hidden>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/config-leads.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

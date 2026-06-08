@@ -93,7 +93,17 @@
   }
 
   function reviewImageSrc(r) {
+    if (window.SiteStore?.getReviewProductImage) {
+      return window.SiteStore.getReviewProductImage(r);
+    }
     return r?.productImageDataUrl || r?.productImage || "";
+  }
+
+  function reviewAvatarSrc(r) {
+    if (window.SiteStore?.getReviewAvatar) {
+      return window.SiteStore.getReviewAvatar(r);
+    }
+    return r?.avatarDataUrl || r?.avatar || "";
   }
 
   function catalogThumbOptions() {
@@ -256,7 +266,45 @@
 
     const embedded = await embedReviewPathAsDataUrl(index);
     if (prev) prev.src = reviewImageSrc(content.reviews[index]);
+    if (!embedded && save) {
+      showToast(
+        "Путь сохранён. Если на главной фото нет — нажмите «Выбрать фото» или положите файл в assets/products/"
+      );
+    }
 
+    if (save) persistToSite({ skipCollect: true });
+    return true;
+  }
+
+  async function applyReviewAvatar(index, { save = true } = {}) {
+    const panel = $("#panel-reviews");
+    const pathInput = panel?.querySelector(`[data-path="reviews.${index}.avatar"]`);
+    const raw = (pathInput?.value || content.reviews[index].avatar || "").trim();
+    if (!raw) {
+      delete content.reviews[index].avatarDataUrl;
+      content.reviews[index].avatar = "";
+      const prev = panel?.querySelector(`[data-avatar-preview="${index}"]`);
+      if (prev) prev.src = reviewAvatarSrc(content.reviews[index]);
+      if (save) persistToSite({ skipCollect: true });
+      return true;
+    }
+
+    const path = normalizeImagePath(raw);
+    content.reviews[index].avatar = path;
+    if (pathInput) pathInput.value = path;
+    delete content.reviews[index].avatarDataUrl;
+
+    const found = await probeImageUrl(path);
+    const prev = panel?.querySelector(`[data-avatar-preview="${index}"]`);
+    if (!found) {
+      showToast("Аватар не найден: " + path);
+      if (prev) prev.src = reviewAvatarSrc(content.reviews[index]);
+      return false;
+    }
+
+    const embedded = await fetchPathAsDataUrl(path, 160);
+    if (embedded) content.reviews[index].avatarDataUrl = embedded.dataUrl;
+    if (prev) prev.src = reviewAvatarSrc(content.reviews[index]);
     if (save) persistToSite({ skipCollect: true });
     return true;
   }
@@ -318,8 +366,8 @@
       ${field("Как работает", "sections.howTitle", s.howTitle)}
       ${field("Популярное", "sections.popularTitle", s.popularTitle)}
       ${field("Каталог", "sections.catalogTitle", s.catalogTitle)}
-      ${field("Конструктор", "sections.builderTitle", s.builderTitle)}
-      ${field("Подпись конструктора", "sections.builderTagline", s.builderTagline, "textarea")}
+      ${field("Игра — заголовок", "sections.builderTitle", s.builderTitle)}
+      ${field("Игра — подпись", "sections.builderTagline", s.builderTagline, "textarea")}
       ${field("Отзывы", "sections.reviewsTitle", s.reviewsTitle)}
       ${field("Подзаголовок отзывов", "sections.reviewsSubtitle", s.reviewsSubtitle)}
       ${field("Текст под отзывами", "sections.reviewsCta", s.reviewsCta)}
@@ -459,17 +507,28 @@
       content.reviews
         .map((r, i) => {
           const img = reviewImageSrc(r);
+          const avatar = reviewAvatarSrc(r);
           return `
       <div class="admin-item">
         <div class="admin-item__head">
           <h3>Отзыв ${i + 1}</h3>
           <button type="button" class="btn btn--ghost btn--small" data-remove-review="${i}">Удалить</button>
         </div>
-        <img class="admin-thumb admin-thumb--wide" src="${escapeAttr(img)}" alt="" data-review-preview="${i}" />
+        <div class="admin-review-photos">
+          <img class="admin-thumb" src="${escapeAttr(avatar)}" alt="" data-avatar-preview="${i}" width="56" height="56" />
+          <img class="admin-thumb admin-thumb--wide" src="${escapeAttr(img)}" alt="" data-review-preview="${i}" />
+        </div>
         ${reviewImagePickHtml(i, normalizeImagePath(r.productImage) || r.productImage || "")}
         ${field("Имя", `reviews.${i}.name`, r.name)}
         ${field("Дата", `reviews.${i}.date`, r.date)}
-        ${field("Аватар (URL или путь)", `reviews.${i}.avatar`, r.avatar)}
+        ${field("Аватар (путь, пусто = буква из имени)", `reviews.${i}.avatar`, r.avatar || "")}
+        <div class="admin-field admin-field--row">
+          <button type="button" class="btn btn--ghost btn--small" data-apply-avatar-path="${i}">Применить аватар</button>
+          <label class="admin-file-btn btn btn--ghost btn--small">
+            Фото аватара
+            <input type="file" accept="image/*,.png,.jpg,.jpeg,.webp,.gif" hidden data-upload-avatar="${i}" />
+          </label>
+        </div>
         ${field("Фото товара (путь)", `reviews.${i}.productImage`, r.productImage || "")}
         <div class="admin-field admin-field--row">
           <button type="button" class="btn btn--ghost btn--small" data-apply-review-path="${i}">Применить путь</button>
@@ -502,6 +561,31 @@
     panel.querySelectorAll("[data-apply-review-path]").forEach((btn) => {
       btn.addEventListener("click", () => {
         applyReviewPath(Number(btn.dataset.applyReviewPath));
+      });
+    });
+
+    panel.querySelectorAll("[data-apply-avatar-path]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        applyReviewAvatar(Number(btn.dataset.applyAvatarPath));
+      });
+    });
+
+    panel.querySelectorAll("[data-upload-avatar]").forEach((input) => {
+      input.addEventListener("change", async () => {
+        const file = input.files?.[0];
+        const i = Number(input.dataset.uploadAvatar);
+        if (!file) return;
+        try {
+          const dataUrl = await compressImage(file, 160);
+          content.reviews[i].avatarDataUrl = dataUrl;
+          content.reviews[i].avatar = "";
+          const prev = panel.querySelector(`[data-avatar-preview="${i}"]`);
+          if (prev) prev.src = dataUrl;
+          persistToSite({ skipCollect: true });
+        } catch {
+          showToast("Не удалось обработать аватар");
+        }
+        input.value = "";
       });
     });
 
@@ -605,6 +689,7 @@
   function collectAllPanels() {
     const thumbsBefore = content.products.map((p) => p.thumb);
     const reviewPathsBefore = content.reviews.map((r) => r.productImage);
+    const reviewAvatarsBefore = content.reviews.map((r) => r.avatar);
     ["panel-texts", "panel-products", "panel-reviews", "panel-contacts"].forEach((id) => {
       readForm($("#" + id));
     });
@@ -615,6 +700,7 @@
     });
     content.reviews.forEach((r, i) => {
       if (reviewPathsBefore[i] !== r.productImage) delete r.productImageDataUrl;
+      if (reviewAvatarsBefore[i] !== r.avatar) delete r.avatarDataUrl;
     });
   }
 

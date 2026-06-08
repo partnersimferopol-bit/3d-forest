@@ -421,12 +421,15 @@
   }
 
   function wire() {
-    if (!els.form) return;
-
     nowYear();
     renderPopular();
     renderCatalog();
     if (els.budget) els.budget.addEventListener("change", renderCatalog);
+
+    if (!els.form) {
+      refreshAos();
+      return;
+    }
 
     wirePhraseButtons();
     loadTemplate();

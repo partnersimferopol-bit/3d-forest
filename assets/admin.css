@@ -136,6 +136,13 @@
   max-width: 280px;
   height: auto;
   max-height: 160px;
+}
+
+.admin-review-photos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 12px;
 }
 

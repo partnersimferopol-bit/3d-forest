@@ -43,31 +43,62 @@
     return "";
   }
 
+  function reviewAvatarSrc(review) {
+    if (window.SiteStore?.getReviewAvatar) {
+      return window.SiteStore.getReviewAvatar(review);
+    }
+    return review.avatar || "";
+  }
+
+  function reviewProductSrc(review) {
+    if (window.SiteStore?.getReviewProductImage) {
+      return window.SiteStore.getReviewProductImage(review);
+    }
+    return review.productImageDataUrl || review.productImage || "";
+  }
+
   function renderReviews(reviews) {
     const wrapper = document.querySelector(".reviews-swiper .swiper-wrapper");
     if (!wrapper || !Array.isArray(reviews)) return;
 
-    wrapper.innerHTML = reviews
-      .map(
-        (r) => `
-      <div class="swiper-slide">
+    wrapper.innerHTML = "";
+    reviews.forEach((r) => {
+      const slide = document.createElement("div");
+      slide.className = "swiper-slide";
+      slide.innerHTML = `
         <div class="review-card">
           <div class="review-header">
-            <img src="${esc(r.avatar || "")}" alt="" class="review-avatar" width="56" height="56" />
+            <img src="" alt="" class="review-avatar" width="56" height="56" />
             <div>
-              <strong>${esc(r.name || "")}</strong>
-              <span class="review-date">• ${esc(r.date || "")}</span>
+              <strong></strong>
+              <span class="review-date"></span>
               <div class="stars">★★★★★</div>
             </div>
           </div>
-          <img src="${esc(window.SiteStore?.getReviewProductImage?.(r) || r.productImageDataUrl || r.productImage || "")}" alt="" class="review-product" loading="lazy" />
-          <p class="review-text">${esc(r.text || "")}</p>
-          <strong class="review-author">${esc(r.author || "")}</strong>
-        </div>
-      </div>
-    `
-      )
-      .join("");
+          <img src="" alt="" class="review-product" loading="lazy" />
+          <p class="review-text"></p>
+          <strong class="review-author"></strong>
+        </div>`;
+
+      const avatarEl = slide.querySelector(".review-avatar");
+      const productEl = slide.querySelector(".review-product");
+      const avatarSrc = reviewAvatarSrc(r);
+      const productSrc = reviewProductSrc(r);
+
+      if (avatarEl && avatarSrc) avatarEl.src = avatarSrc;
+      if (productEl && productSrc) productEl.src = productSrc;
+
+      const strong = slide.querySelector(".review-header strong");
+      if (strong) strong.textContent = r.name || "";
+      const date = slide.querySelector(".review-date");
+      if (date) date.textContent = "• " + (r.date || "");
+      const text = slide.querySelector(".review-text");
+      if (text) text.textContent = r.text || "";
+      const author = slide.querySelector(".review-author");
+      if (author) author.textContent = r.author || "";
+
+      wrapper.appendChild(slide);
+    });
   }
 
   function apply(content) {
@@ -135,24 +166,58 @@
     renderReviews(content.reviews);
 
     const c = content.contacts || {};
+    const contactDefaults = {
+      "contacts-vk": "https://vk.com/3d_les",
+      "contacts-telegram": "https://web.telegram.org/a/#-1003332873905",
+      "contacts-max": "https://m-x.su/les-3d",
+    };
+
     setText("[data-cms='contacts-workshop']", c.workshopTitle);
     setText("[data-cms='contacts-text']", c.text);
     setText("[data-cms='contacts-phone']", c.phone);
+
+    function applyContactHref(key, url) {
+      let href = String(url || "").trim();
+      if (!href) href = contactDefaults[key] || "#";
+      if (key === "contacts-telegram" && /t\.me\/c\//i.test(href)) {
+        href = contactDefaults[key];
+      }
+      document.querySelectorAll(`[data-cms-href="${key}"]`).forEach((el) => {
+        el.href = href;
+      });
+    }
+
+    applyContactHref("contacts-vk", c.vkUrl);
+    applyContactHref("contacts-telegram", c.telegramUrl);
+    applyContactHref("contacts-max", c.maxUrl);
+
     const vk = document.querySelector("[data-cms='contacts-vk']");
-    if (vk) {
-      vk.href = c.vkUrl || "#";
-      vk.textContent = c.vkLabel || "";
-    }
+    if (vk) vk.textContent = c.vkLabel || "vk.com/3d_les";
     const tg = document.querySelector("[data-cms='contacts-telegram']");
-    if (tg) {
-      tg.href = c.telegramUrl || "#";
-      tg.textContent = c.telegramLabel || "";
-    }
+    if (tg) tg.textContent = c.telegramLabel || "чат в Telegram";
     const max = document.querySelector("[data-cms='contacts-max']");
-    if (max) {
-      max.href = c.maxUrl || "#";
-      max.textContent = c.maxLabel || "";
-    }
+    if (max) max.textContent = c.maxLabel || "m-x.su/les-3d";
+
+    wireContactLinks();
+  }
+
+  function wireContactLinks() {
+    document.querySelectorAll("[data-cms-href]").forEach((link) => {
+      if (link.dataset.contactWired === "1") return;
+      link.dataset.contactWired = "1";
+      link.addEventListener("click", (e) => {
+        const url = link.getAttribute("href");
+        if (!url || url === "#" || !/^https?:/i.test(url)) {
+          e.preventDefault();
+          return;
+        }
+        if (window.location.protocol === "file:") {
+          e.preventDefault();
+          const opened = window.open(url, "_blank");
+          if (!opened) window.location.assign(url);
+        }
+      });
+    });
   }
 
   function init() {

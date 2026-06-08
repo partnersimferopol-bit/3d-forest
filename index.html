@@ -2,7 +2,7 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>3Д-лес — Подарки со смыслом, которые запоминаются</title>
     <meta
       name="description"
@@ -36,11 +36,13 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        background: #fff;
+        background: rgba(36, 29, 23, 0.92);
+        border: 1px solid rgba(212, 149, 74, 0.16);
         padding: 12px 18px;
         border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         font-size: 0.95rem;
+        color: var(--ink);
       }
       .reaction img {
         width: 48px;
@@ -50,27 +52,9 @@
 
       .benefits-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
         gap: 30px;
         margin-top: 40px;
-      }
-      .quick-phrases {
-        margin: 18px 0 10px;
-      }
-      .quick-phrases strong {
-        display: block;
-        margin-bottom: 10px;
-        font-size: 0.95rem;
-      }
-      .phrase-btn {
-        background: #f8f8f8;
-        border: 1px solid #ddd;
-        padding: 8px 14px;
-        margin: 4px 6px 4px 0;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.2s;
       }
       .lead--emotional {
         font-size: 1.25rem;
@@ -80,17 +64,18 @@
 
       .popular-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
         gap: 24px;
       }
 
       .popular-card {
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(36, 29, 23, 0.92);
         border-radius: 16px;
         overflow: hidden;
-        border: 1px solid rgba(61, 42, 26, 0.12);
-        box-shadow: 0 8px 24px rgba(45, 30, 18, 0.1);
+        border: 1px solid rgba(212, 149, 74, 0.14);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
         transition: transform 0.2s ease;
+        color: var(--ink);
       }
       .popular-card:hover {
         transform: translateY(-4px);
@@ -134,7 +119,7 @@
   </head>
 
   <body>
-    <a class="skip-link" href="#builder">Перейти к конструктору</a>
+    <a class="skip-link" href="#game">Перейти к игре</a>
 
     <header class="topbar">
       <div class="topbar__inner">
@@ -155,30 +140,39 @@
           <a class="nav__link" href="#how">Как это работает</a>
           <a class="nav__link" href="#popular">Популярное</a>
           <a class="nav__link" href="#catalog">Каталог</a>
-          <a class="nav__link" href="#builder">Собрать подарок</a>
+          <a class="nav__link" href="#game">Подарок из Будущего</a>
           <a class="nav__link" href="#reviews">Отзывы</a>
         </nav>
 
         <div class="topbar__actions">
           <a
+            class="btn btn--game btn--small"
+            href="#game"
+            aria-label="Игра «Подарок из Будущего»"
+            >Подарок из Будущего</a
+          >
+          <a
+            data-cms-href="contacts-vk"
             href="https://vk.com/3d_les"
-            class="btn btn--primary btn--small"
+            class="btn btn--primary btn--small topbar__social"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Мы ВКонтакте"
             >ВКонтакте</a
           >
           <a
+            data-cms-href="contacts-telegram"
             href="https://web.telegram.org/a/#-1003332873905"
-            class="btn btn--primary btn--small"
+            class="btn btn--primary btn--small topbar__social"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Написать в Telegram"
             >Telegram</a
           >
           <a
+            data-cms-href="contacts-max"
             href="https://m-x.su/les-3d"
-            class="btn btn--primary btn--small"
+            class="btn btn--primary btn--small topbar__social"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Написать в мессенджере Max"
@@ -201,9 +195,7 @@
             </p>
 
             <div class="hero__cta" data-aos="fade-up" data-aos-delay="500">
-              <a class="btn btn--primary" href="#builder"
-                >Подобрать подарок за 30 секунд</a
-              >
+              <a class="btn btn--game" href="#game">Подарок из Будущего — игра</a>
               <a class="btn btn--ghost" href="#popular">Посмотреть популярные</a>
             </div>
 
@@ -309,98 +301,26 @@
         </div>
       </section>
 
-      <section class="section" id="builder" aria-label="Конструктор" data-aos="fade-up" data-aos-duration="900">
+      <section class="section" id="game" aria-label="Игра Подарок из Будущего" data-aos="fade-up" data-aos-duration="900">
         <div class="section__inner">
-          <h2 data-aos="fade-up" data-cms="builder-title">Соберите свой подарок</h2>
+          <h2 data-aos="fade-up" data-cms="builder-title">Подарок из Будущего</h2>
           <p class="tagline" data-aos="fade-up" data-aos-delay="100" data-cms="builder-tagline">
-            Параметры и текст сразу попадают в предпросмотр
+            Пройдите 6 шагов — мастер из будущего подскажет идею персонального подарка
           </p>
-
-          <div class="container">
-            <div class="panel" data-aos="fade-right" data-aos-delay="200">
-              <h3>Настройка</h3>
-              <form id="giftForm" novalidate>
-                <label for="target">Кому подарок</label>
-                <select id="target" name="target" required>
-                  <option value="" selected>Выберите</option>
-                  <option value="guy">Парню / мужу</option>
-                  <option value="family">Маме / ребёнку</option>
-                  <option value="friends">Друзьям</option>
-                </select>
-
-                <label for="type">Тип изделия</label>
-                <select id="type" name="type" required>
-                  <option value="decor" selected>Декор из фанеры</option>
-                  <option value="3d">3D изделие</option>
-                  <option value="personal">Персональный подарок</option>
-                </select>
-
-                <label for="personal">Персонализация</label>
-                <select id="personal" name="personal">
-                  <option value="none" selected>Без персонализации</option>
-                  <option value="name">Имя / дата</option>
-                  <option value="story">История / надпись</option>
-                </select>
-
-                <label for="speed">Срочность</label>
-                <select id="speed" name="speed">
-                  <option value="std" selected>Стандарт (3–5 дней)</option>
-                  <option value="fast">Срочно (1–2 дня)</option>
-                </select>
-
-                <label for="text">Текст на изделии</label>
-                <textarea
-                  id="text"
-                  name="text"
-                  placeholder="Например: Лучшему мужу • 14.02.2025 • Люблю тебя вечно"
-                  maxlength="150"
-                ></textarea>
-
-                <div class="quick-phrases">
-                  <strong>Популярные надписи:</strong>
-                  <button type="button" class="phrase-btn" data-text="Люблю тебя">
-                    Люблю тебя
-                  </button>
-                  <button
-                    type="button"
-                    class="phrase-btn"
-                    data-text="Наша первая годовщина"
-                  >
-                    Годовщина
-                  </button>
-                  <button
-                    type="button"
-                    class="phrase-btn"
-                    data-text="Лучшему папе в мире"
-                  >
-                    Лучшему папе
-                  </button>
-                  <button
-                    type="button"
-                    class="phrase-btn"
-                    data-text="С днём рождения, солнышко"
-                  >
-                    С днём рождения
-                  </button>
-                </div>
-
-                <div class="actions">
-                  <button class="primary" type="submit">Рассчитать</button>
-                </div>
-
-                <div class="total-line" aria-live="polite">
-                  <h3>Итого: <span id="total">0 ₽</span></h3>
-                  <p class="hint" id="priceHint"></p>
-                </div>
-              </form>
-            </div>
-
-            <div class="panel" data-aos="fade-left" data-aos-delay="300">
-              <h3>Как это будет выглядеть</h3>
-              <div class="preview" id="preview">
-                Выберите параметры слева и текст — увидите предпросмотр
-              </div>
-            </div>
+          <div class="game-embed__actions" data-aos="fade-up" data-aos-delay="150">
+            <a class="btn btn--game" href="wedding/index.html" target="_blank" rel="noopener noreferrer"
+              >Открыть игру в полном окне</a
+            >
+          </div>
+          <div class="game-embed" data-aos="fade-up" data-aos-delay="200">
+            <iframe
+              class="game-embed__frame"
+              src="wedding/index.html"
+              title="Игра «Подарок из Будущего»"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="clipboard-write"
+            ></iframe>
           </div>
         </div>
       </section>
@@ -518,7 +438,7 @@
 
           <div class="reviews-cta" data-aos="fade-up" data-aos-delay="400">
             <p data-cms="reviews-cta">Хотите такой же подарок, от которого будут эмоции?</p>
-            <a href="#builder" class="btn btn--primary">Собрать свой подарок →</a>
+            <a href="#game" class="btn btn--game">Подарок из Будущего →</a>
           </div>
         </div>
       </section>
@@ -535,15 +455,15 @@
               <ul class="contacts__list">
                 <li>
                   <strong>ВКонтакте:</strong>
-                  <a data-cms="contacts-vk" href="https://vk.com/3d_les" target="_blank" rel="noopener noreferrer">vk.com/3d_les</a>
+                  <a data-cms-href="contacts-vk" data-cms="contacts-vk" href="https://vk.com/3d_les" target="_blank" rel="noopener noreferrer">vk.com/3d_les</a>
                 </li>
                 <li>
                   <strong>Telegram:</strong>
-                  <a data-cms="contacts-telegram" href="https://web.telegram.org/a/#-1003332873905" target="_blank" rel="noopener noreferrer">чат в Telegram</a>
+                  <a data-cms-href="contacts-telegram" data-cms="contacts-telegram" href="https://web.telegram.org/a/#-1003332873905" target="_blank" rel="noopener noreferrer">чат в Telegram</a>
                 </li>
                 <li>
                   <strong>Max:</strong>
-                  <a data-cms="contacts-max" href="https://m-x.su/les-3d" target="_blank" rel="noopener noreferrer">m-x.su/les-3d</a>
+                  <a data-cms-href="contacts-max" data-cms="contacts-max" href="https://m-x.su/les-3d" target="_blank" rel="noopener noreferrer">m-x.su/les-3d</a>
                 </li>
                 <li><strong>Телефон:</strong> <span data-cms="contacts-phone">+7 (___) ___-__-__</span></li>
               </ul>
@@ -556,6 +476,8 @@
     <footer class="footer">
       <div class="footer__inner">
         <span>© <span id="year"></span> 3Д-лес — Подарки со смыслом</span>
+        <a class="footer__link" href="privacy.html">Политика конфиденциальности</a>
+        <a class="footer__link" href="wedding/oferta.html">Публичная оферта</a>
       </div>
     </footer>
 

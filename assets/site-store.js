@@ -45,8 +45,9 @@
         howTitle: "Как это работает",
         popularTitle: "Популярные подарки",
         catalogTitle: "Мини-каталог",
-        builderTitle: "Соберите свой подарок",
-        builderTagline: "Параметры и текст сразу попадают в предпросмотр",
+        builderTitle: "Подарок из Будущего",
+        builderTagline:
+          "Пройдите 6 шагов — мастер из будущего подскажет идею персонального подарка",
         reviewsTitle: "Они уже подарили эмоции",
         reviewsSubtitle: "Реальные истории и реакции наших клиентов",
         reviewsCta: "Хотите такой же подарок, от которого будут эмоции?",
@@ -85,54 +86,48 @@
         {
           name: "Алина, 28 лет",
           date: "май 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/ffebee/7a4f22?text=%D0%90",
-          productImage: "https://picsum.photos/id/1015/600/380",
+          avatar: "",
+          productImage: "assets/products/kalendar-karandash.png",
           text: "«Дарила мужу на годовщину. Он реально прослезился. Говорит, что это лучший подарок за все годы.»",
           author: "— Панно с координатами",
         },
         {
           name: "Екатерина, 34 года",
           date: "май 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/e8dfd4/7a4f22?text=%D0%95",
-          productImage: "https://picsum.photos/id/201/600/380",
+          avatar: "",
+          productImage: "assets/products/kalendar-karandash.png",
           text: "«Сделали именное панно для детской. Ребёнок теперь каждый вечер просит почитать надпись.»",
           author: "— Именное панно",
         },
         {
           name: "Мария, 31 год",
           date: "апрель 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/f5f0e6/7a4f22?text=%D0%9C",
-          productImage: "https://picsum.photos/id/237/600/380",
+          avatar: "",
+          productImage: "assets/products/kupyurnitsa.png",
           text: "«Заказывала срочно за 2 дня. Качество огонь! Мама до сих пор в восторге.»",
           author: "— Срочный подарок маме",
         },
         {
           name: "Ольга, 27 лет",
           date: "апрель 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/fff3e0/7a4f22?text=%D0%9E",
-          productImage: "https://picsum.photos/id/133/600/380",
+          avatar: "",
+          productImage: "assets/products/nardy.png",
           text: "«Подарок парню с координатами первого свидания. Сказал, что никогда ничего подобного не получал.»",
           author: "— Карта с координатами",
         },
         {
           name: "Ирина, 35 лет",
           date: "март 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/e8eaf6/7a4f22?text=%D0%98",
-          productImage: "https://picsum.photos/id/180/600/380",
+          avatar: "",
+          productImage: "assets/products/kupyurnitsa.png",
           text: "«Все гости на свадьбе спрашивали, где такое заказать. Очень красиво и душевно.»",
           author: "— Свадебный подарок",
         },
         {
           name: "Настя, 29 лет",
           date: "март 2026",
-          avatar:
-            "https://via.placeholder.com/80x80/fce4ec/7a4f22?text=%D0%9D",
-          productImage: "https://picsum.photos/id/251/600/380",
+          avatar: "",
+          productImage: "assets/products/podstavka-ruchka.png",
           text: "«Заказывала уже третий раз. Качество стабильно высокое.»",
           author: "— Декор для дома",
         },
@@ -188,14 +183,57 @@
     return p.startsWith("assets/") ? p : `assets/products/${p.replace(/^\.?\//, "")}`;
   }
 
+  function letterAvatarDataUrl(letter, bg = "e8dfd4", fg = "7a4f22") {
+    const ch = String(letter || "?")
+      .trim()
+      .charAt(0)
+      .toUpperCase();
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect fill="#${bg}" width="80" height="80" rx="40"/><text x="40" y="48" text-anchor="middle" dominant-baseline="middle" fill="#${fg}" font-size="34" font-family="Arial,sans-serif">${ch}</text></svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
+
   function getProductImage(product) {
-    if (product.thumbDataUrl) return product.thumbDataUrl;
-    return product.thumb || "";
+    if (product?.thumbDataUrl) return product.thumbDataUrl;
+    const path = product?.thumb || "";
+    if (/^data:/i.test(path)) return path;
+    if (/^https?:\/\//i.test(path)) return path;
+    return resolveAssetPath(path);
   }
 
   function getReviewProductImage(review) {
-    if (review.productImageDataUrl) return review.productImageDataUrl;
-    return review.productImage || "";
+    if (review?.productImageDataUrl) return review.productImageDataUrl;
+    const path = review?.productImage || "";
+    if (/^data:/i.test(path)) return path;
+    if (/^https?:\/\//i.test(path)) return path;
+    return resolveAssetPath(path);
+  }
+
+  function getReviewAvatar(review) {
+    if (review?.avatarDataUrl) return review.avatarDataUrl;
+    const path = review?.avatar || "";
+    if (/via\.placeholder\.com/i.test(path)) {
+      return letterAvatarDataUrl(review?.name || "?");
+    }
+    if (/^data:/i.test(path)) return path;
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path) return resolveAssetPath(path);
+    return letterAvatarDataUrl(review?.name || "?");
+  }
+
+  function migrateReviewImages(review) {
+    if (!review || typeof review !== "object") return review;
+    const copy = { ...review };
+    if (/via\.placeholder\.com/i.test(copy.avatar || "")) {
+      copy.avatar = "";
+    }
+    if (
+      !copy.productImageDataUrl &&
+      /^https?:\/\//i.test(copy.productImage || "") &&
+      !/^data:/i.test(copy.productImage || "")
+    ) {
+      copy.productImage = "assets/products/kalendar-karandash.png";
+    }
+    return copy;
   }
 
   function saveContent(content) {
@@ -214,9 +252,10 @@
           return copy;
         });
         lean.reviews = (lean.reviews || []).map((r) => {
-          if (!r.productImageDataUrl) return r;
+          if (!r.productImageDataUrl && !r.avatarDataUrl) return r;
           const copy = { ...r };
           delete copy.productImageDataUrl;
+          delete copy.avatarDataUrl;
           return copy;
         });
         try {
@@ -235,9 +274,39 @@
     }
   }
 
+  function normalizeContacts(contacts) {
+    const defaults = {
+      vkUrl: "https://vk.com/3d_les",
+      vkLabel: "vk.com/3d_les",
+      telegramUrl: "https://web.telegram.org/a/#-1003332873905",
+      telegramLabel: "чат в Telegram",
+      maxUrl: "https://m-x.su/les-3d",
+      maxLabel: "m-x.su/les-3d",
+    };
+    const c = { ...defaults, ...(contacts || {}) };
+    const tg = String(c.telegramUrl || "").trim();
+    if (!tg || /t\.me\/c\//i.test(tg)) {
+      c.telegramUrl = defaults.telegramUrl;
+    }
+    if (!String(c.vkUrl || "").trim()) c.vkUrl = defaults.vkUrl;
+    if (!String(c.maxUrl || "").trim()) c.maxUrl = defaults.maxUrl;
+    return c;
+  }
+
+  function normalizeStoredContent(content) {
+    if (!content) return content;
+    if (Array.isArray(content.reviews)) {
+      content.reviews = content.reviews.map(migrateReviewImages);
+    }
+    if (content.contacts) {
+      content.contacts = normalizeContacts(content.contacts);
+    }
+    return content;
+  }
+
   function loadContent() {
     const stored = loadFromStorage();
-    if (stored) return stored;
+    if (stored) return normalizeStoredContent(stored);
     return buildDefaultContent();
   }
 
@@ -305,6 +374,8 @@ window.CATALOG_PRODUCTS = ${JSON.stringify(products, null, 2)};
     resolveAssetPath,
     getProductImage,
     getReviewProductImage,
+    getReviewAvatar,
+    letterAvatarDataUrl,
     getSettings,
     saveSettings,
     checkPassword,
