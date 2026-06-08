@@ -220,9 +220,9 @@
     });
   }
 
-  function init() {
+  async function init() {
     if (!window.SiteStore) return;
-    const content = window.SiteStore.loadContent();
+    const content = await window.SiteStore.loadContentForPage();
     apply(content);
     window.__SITE_CONTENT__ = content;
     document.dispatchEvent(new CustomEvent("site-content-applied", { detail: content }));
@@ -230,11 +230,12 @@
   }
 
   function boot() {
+    const run = () => init();
     if (!document.getElementById("catalogGrid") && !document.querySelector("[data-cms='hero-title']")) {
-      document.addEventListener("DOMContentLoaded", init);
+      document.addEventListener("DOMContentLoaded", run);
       return;
     }
-    init();
+    run();
   }
 
   boot();

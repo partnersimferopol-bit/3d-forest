@@ -751,6 +751,21 @@
     persistToSite();
   });
 
+  $("#publishBtn")?.addEventListener("click", () => {
+    collectAllPanels();
+    persistToSite({ skipCollect: true });
+    const { warnings } = window.SiteStore.exportPublishJson(content);
+    window.SiteStore.exportCatalogJs(
+      window.SiteStore.prepareForPublish(content)
+    );
+    let msg =
+      "Скачаны site-content.json и catalog.js. Положите JSON в assets/site-content.json, фото в assets/products/, затем git push.";
+    if (warnings.length) {
+      msg += " Внимание: " + warnings.slice(0, 2).join("; ");
+    }
+    showToast(msg);
+  });
+
   $("#exportJsonBtn")?.addEventListener("click", () => {
     collectAllPanels();
     window.SiteStore.exportJson(content);

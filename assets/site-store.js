@@ -304,29 +304,89 @@
     return content;
   }
 
+  function isLocalPreview() {
+    const host = location.hostname;
+    return (
+      location.protocol === "file:" ||
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      /[?&]preview=1(?:&|$)/.test(location.search)
+    );
+  }
+
   function loadContent() {
     const stored = loadFromStorage();
-    if (stored) return normalizeStoredContent(stored);
+    if (isLocalPreview() && stored) return normalizeStoredContent(stored);
+    return buildDefaultContent();
+  }
+
+  async function loadContentForPage() {
+    const fromFile = await loadFromFile();
+    const fromStorage = loadFromStorage();
+
+    if (isLocalPreview() && fromStorage) {
+      return normalizeStoredContent(fromStorage);
+    }
+    if (fromFile) return normalizeStoredContent(fromFile);
+    if (fromStorage) return normalizeStoredContent(fromStorage);
     return buildDefaultContent();
   }
 
   async function loadContentAsync() {
-    const stored = loadFromStorage();
-    if (stored) return stored;
-    const file = await loadFromFile();
-    if (file) return file;
-    return buildDefaultContent();
+    return loadContentForPage();
   }
 
-  function exportJson(content) {
+  /** Убирает тяжёлые data: из JSON для публикации на GitHub (остаются пути к файлам). */
+  function prepareForPublish(content) {
+    const copy = JSON.parse(JSON.stringify(content || {}));
+    copy.updatedAt = new Date().toISOString();
+
+    (copy.products || []).forEach((p) => {
+      if (p.thumb && p.thumbDataUrl) delete p.thumbDataUrl;
+    });
+    (copy.reviews || []).forEach((r) => {
+      if (r.productImage && r.productImageDataUrl) delete r.productImageDataUrl;
+      if (r.avatar && r.avatarDataUrl) delete r.avatarDataUrl;
+    });
+    if (copy.hero?.emblem && copy.hero?.emblemDataUrl) {
+      delete copy.hero.emblemDataUrl;
+    }
+    return copy;
+  }
+
+  function publishWarnings(content) {
+    const warnings = [];
+    (content.products || []).forEach((p, i) => {
+      if (p.thumbDataUrl && !p.thumb) {
+        warnings.push(`Товар «${p.name || i + 1}»: нет пути к файлу фото`);
+      } else if (p.thumbDataUrl && p.thumb) {
+        warnings.push(
+          `Товар «${p.name || i + 1}»: положите файл ${p.thumb} в репозиторий`
+        );
+      }
+    });
+    return warnings;
+  }
+
+  function downloadJson(content, filename = "site-content.json") {
     const blob = new Blob([JSON.stringify(content, null, 2)], {
       type: "application/json",
     });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "site-content.json";
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(a.href);
+  }
+
+  function exportJson(content) {
+    downloadJson(content);
+  }
+
+  function exportPublishJson(content) {
+    const prepared = prepareForPublish(content);
+    downloadJson(prepared, "site-content.json");
+    return { prepared, warnings: publishWarnings(content) };
   }
 
   function exportCatalogJs(content) {
@@ -368,8 +428,13 @@ window.CATALOG_PRODUCTS = ${JSON.stringify(products, null, 2)};
     buildDefaultContent,
     loadContent,
     loadContentAsync,
+    loadContentForPage,
+    isLocalPreview,
+    prepareForPublish,
+    publishWarnings,
     saveContent,
     exportJson,
+    exportPublishJson,
     exportCatalogJs,
     resolveAssetPath,
     getProductImage,

@@ -191,6 +191,14 @@
   opacity: 1;
 }
 
+.admin-hint--warn {
+  border-left: 3px solid var(--accent-laser, #c45c26);
+  padding-left: 12px;
+  background: rgba(196, 92, 38, 0.08);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
 .admin-hint {
   font-size: 0.9rem;
   opacity: 0.85;
